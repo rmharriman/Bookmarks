@@ -1,6 +1,6 @@
 from flask import jsonify, request, url_for
 from . import api
-from app import db
+from .. import db
 from app.models import Bookmark
 
 
