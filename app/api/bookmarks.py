@@ -17,7 +17,7 @@ def get_bookmark(id):
 
 
 @api.route("/bookmarks/", methods=["POST"])
-def new_post():
+def new_bookmark():
     bookmark = Bookmark.from_json(request.json)
     db.session.add(bookmark)
     db.session.commit()
