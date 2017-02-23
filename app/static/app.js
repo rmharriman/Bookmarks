@@ -1,3 +1,10 @@
-git /**
- * Created by rmharriman on 2/22/17.
- */
+var Bookmark = can.Model.extend({
+    findAll: "GET /bookmarsk",
+    create: "POST /bookmarks",
+    update: "PUT /bookmarks/{id}",
+    destroy: "DELETE /bookmarsk/{id}"
+}, {
+
+});
+
+
