@@ -5,9 +5,11 @@
     <title>Homepage</title>
 </head>
 <body>
+<div id="container">
+</div>
 
 <script src="https://code.jquery.com/jquery-2.2.4.js"></script>
-<script src="https://unpkg.com/can/dist/global/can.js"></script>
-<script src="{{ url_for('static', app.js) }}"></script>
+<script src="//canjs.com/release/2.3.27/can.jquery.js"></script>
+<script src="{{ url_for('static', filename='app-test.js') }}"></script>
 </body>
 </html>
