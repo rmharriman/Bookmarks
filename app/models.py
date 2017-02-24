@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import url_for
 from . import db
 
@@ -10,6 +11,13 @@ class Bookmark(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.String(256), unique=True)
     title = db.Column(db.String(256), index=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    tags = db.relationship("Tagging",
+                           foreign_keys=[Tagging.id],
+                           backref=db.backref("bookmark_tags", lazy="dynamic"),
+                           lazy="dynamic",
+                           cascade="all, delete-orphan"
+                           )
 
     def to_json(self):
         json_bookmark = {
@@ -18,3 +26,26 @@ class Bookmark(db.Model):
             "title": self.title
         }
         return json_bookmark
+
+
+class Tag(db.Model):
+    __tablename__ = "tags"
+    id = db.Column(db.Integer, primary_key=True)
+    label = db.Column(db.String(256), unique=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_json(self):
+        json_tag = {
+            "id": self.id,
+            "label": self.label,
+            "timestamp": self.timestamp
+        }
+        return json_tag
+
+
+class Tagging(db.Model):
+    __tablename__ = "taggings"
+    tag_id = db.Column(db.Integer, db.ForeignKey("tags.id"))
+    bookmark_id = db.Column(db.Integer, db.ForeignKey("bookmarks.id"))
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
