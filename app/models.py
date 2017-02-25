@@ -42,6 +42,10 @@ class Tag(db.Model):
         }
         return json_tag
 
+    @staticmethod
+    def from_json(json_tag):
+        label = json_tag.get("label")
+        return Tag(label=label)
 
 class Tagging(db.Model):
     __tablename__ = "taggings"
