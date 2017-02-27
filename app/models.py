@@ -27,6 +27,11 @@ class Bookmark(db.Model):
         }
         return json_bookmark
 
+    @staticmethod
+    def from_json(json_bookmark):
+        bookmark = json_bookmark.get("bookmark")
+        return Bookmark(url=bookmark.get("url"), title=bookmark.get("title"))
+
 
 class Tag(db.Model):
     __tablename__ = "tags"
@@ -46,6 +51,7 @@ class Tag(db.Model):
     def from_json(json_tag):
         label = json_tag.get("label")
         return Tag(label=label)
+
 
 class Tagging(db.Model):
     __tablename__ = "taggings"
