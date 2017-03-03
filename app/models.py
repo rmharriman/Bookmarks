@@ -3,6 +3,13 @@ from flask import url_for
 from . import db
 
 
+class Tagging(db.Model):
+    __tablename__ = "taggings"
+    tag_id = db.Column(db.Integer, db.ForeignKey("tags.id"), primary_key=True)
+    bookmark_id = db.Column(db.Integer, db.ForeignKey("bookmarks.id"), primary_key=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+
 class Bookmark(db.Model):
     """SQLAlchemy provides a baseclass with a set of helper functions to inherit"""
     # Tablename is optional but convention uses plurals as table names so good practice to have
@@ -13,7 +20,7 @@ class Bookmark(db.Model):
     title = db.Column(db.String(256), index=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
     tags = db.relationship("Tagging",
-                           foreign_keys=[Tagging.id],
+                           foreign_keys=[Tagging.tag_id],
                            backref=db.backref("bookmark_tags", lazy="dynamic"),
                            lazy="dynamic",
                            cascade="all, delete-orphan"
@@ -53,9 +60,4 @@ class Tag(db.Model):
         return Tag(label=label)
 
 
-class Tagging(db.Model):
-    __tablename__ = "taggings"
-    tag_id = db.Column(db.Integer, db.ForeignKey("tags.id"))
-    bookmark_id = db.Column(db.Integer, db.ForeignKey("bookmarks.id"))
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
