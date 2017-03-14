@@ -3,11 +3,11 @@ from flask import url_for
 from . import db
 
 
-class Tagging(db.Model):
-    __tablename__ = "taggings"
-    tag_id = db.Column(db.Integer, db.ForeignKey("tags.id"), primary_key=True)
-    bookmark_id = db.Column(db.Integer, db.ForeignKey("bookmarks.id"), primary_key=True)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+taggings = db.Table("taggings",
+                    db.Column("tag_id", db.Integer, db.ForeignKey("tags.id")),
+                    db.Column("bookmark_id", db.Integer, db.ForeignKey("bookmarks.id")),
+                    db.Column("timestamp", db.DateTime, default=datetime.utcnow)
+                    )
 
 
 class Bookmark(db.Model):
@@ -19,11 +19,11 @@ class Bookmark(db.Model):
     url = db.Column(db.String(256), unique=True)
     title = db.Column(db.String(256), index=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    tags = db.relationship("Taggings",
-                           foreign_keys=[Tagging.bookmark_id],
-                           backref=db.backref("bookmark_tags", lazy="dynamic"),
+    tags = db.relationship("Tag",
+                           secondary=taggings,
+                           backref=db.backref("bookmarks", lazy="dynamic"),
                            lazy="dynamic",
-                           cascade="all, delete-orphan"
+                           cascade="all"
                            )
 
     def to_json(self):
