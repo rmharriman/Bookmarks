@@ -19,8 +19,8 @@ class Bookmark(db.Model):
     url = db.Column(db.String(256), unique=True)
     title = db.Column(db.String(256), index=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    tags = db.relationship("Tagging",
-                           foreign_keys=[Tagging.tag_id],
+    tags = db.relationship("Taggings",
+                           foreign_keys=[Tagging.bookmark_id],
                            backref=db.backref("bookmark_tags", lazy="dynamic"),
                            lazy="dynamic",
                            cascade="all, delete-orphan"
